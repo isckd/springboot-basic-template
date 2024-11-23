@@ -2,7 +2,27 @@
 springboot-basic-template 
 (springboot 3.3.4, JDK 21, Kotlin 1.9.22, gradle 8.5)
 
+<br>
+<br>
+
 ---
+
+<br>
+<br>
+
+# First Setting
+settings.gradle.kts - rootProject.name = {projectName}  <br>
+application.yml <br>
+- spring.application.name = {projectName}
+- server.port = {port}
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
 
 # Local build and run
 
@@ -16,7 +36,14 @@ docker pull openjdk:21-jdk
 docker build -t springboot-basic-template .
 docker run -p 8080:8080 --name springboot-basic-template springboot-basic-template
 
+
+<br>
+<br>
+
 ---
+
+<br>
+<br>
 
 
 # Logging
@@ -29,12 +56,22 @@ docker run -p 8080:8080 --name springboot-basic-template springboot-basic-templa
 
 Datetime LogLevel Thread className T[TraceId] - [REQ/RES] HTTPMethod URI RequestBody 
     Headers
-와 같은 형식으로 출력 (상세 : logback-spring.xml)
+와 같은 형식으로 출력 (상세 : CustomRequestLoggingFilter, logback-spring.xml)
 ```
-2024-11-23 14:01:47.288 INFO  [http-nio-8080-exec-9] c.e.d.c.CustomRequestLoggingFilter T[20241123140045-bb8a3c4] - [REQ] POST /api/books { "id": 1, "name": "The Lord of the Rings", "category": "Fantasy2"} 
-	Headers={host=localhost:8080, user-agent=curl/7.87.0, accept=*/*, content-type=application/json, x-trace-id=20241123140045-bb8a3c4, content-length=74}
-2024-11-23 14:01:47.291 INFO  [http-nio-8080-exec-9] c.e.d.c.CustomRequestLoggingFilter T[20241123140045-bb8a3c4] - [RES] 200 3ms /api/books {"id":1,"name":"The Lord of the Rings","category":"Fantasy2"} 
-	Headers={X-Trace-Id=20241123140045-bb8a3c4}    
+2024-11-23 23:52:00.418 INFO  [http-nio-8080-exec-1] c.e.d.c.CustomRequestLoggingFilter T[20241123235200-8138947] - [SBT-REQ] POST /api/books {"id":null,"name":"Test Book","category":"Test Category"}
+    Headers={accept-encoding=gzip, user-agent=ReactorNetty/1.1.22, host=localhost:8080, accept=*, x-component-name=SBT, content-type=application/json, content-length=57}
+2024-11-23 23:52:00.503 DEBUG [http-nio-8080-exec-1] org.hibernate.SQL T[20241123235200-8138947] - 
+    select
+        next value for books_seq
+2024-11-23 23:52:00.528 DEBUG [http-nio-8080-exec-1] org.hibernate.SQL T[20241123235200-8138947] - 
+    insert 
+    into
+        books
+        (category, name, id) 
+    values
+        (?, ?, ?)    
+2024-11-23 23:52:00.545 INFO  [http-nio-8080-exec-1] c.e.d.c.CustomRequestLoggingFilter T[20241123235200-8138947] - [SBT-RES] 200 126ms /api/books {"id":1,"name":"Test Book","category":"Test Category"}
+    Headers={X-Trace-Id=20241123235200-8138947}    
 ```
 
 ## DB Connection Pool, HTTP Connection Pool
@@ -45,9 +82,15 @@ Datetime LogLevel Thread className T[TraceId] - [REQ/RES] HTTPMethod URI Request
 2024-11-23 13:55:28.303 INFO  [scheduling-1] c.e.d.config.ConnectionPoolMonitor T[] - [DB Connection Pool]: Active=0, Idle=10, Total=10, Awaiting=0, MaxPoolSize=10 
 ```
 
-# TODO
-restTemplate / restClinet 등으로 HTTP 요청 보낼 때 헤더값에 TraceId, componentName 부여
-HTTP Reqeust 요청 받을 시 componentName 처리해서 [componentName-REQ/RES] 와 같이 출력
+<br>
+<br>
 
-전역 에러 처리 적용
-Actuator 적용
+---
+
+<br>
+<br>
+
+# TODO
+전역 에러 처리 적용 <br>
+Actuator 적용 <br>
+WebClient 사용 예시 <br>

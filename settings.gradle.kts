@@ -1,1 +1,1 @@
-rootProject.name = "springboot-basic-template"
+rootProject.name = "SBT"

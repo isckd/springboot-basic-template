@@ -3,7 +3,7 @@ package com.example.demo.config
 import com.zaxxer.hikari.HikariDataSource
 import org.apache.tomcat.util.threads.ThreadPoolExecutor
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext
 import org.springframework.scheduling.annotation.Scheduled
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 import javax.sql.DataSource
 
 @Component
-@ConditionalOnClass(ServletWebServerApplicationContext::class)
+@ConditionalOnBean(ServletWebServerApplicationContext::class)
 class ConnectionPoolMonitor(
     private val webServerContext: ServletWebServerApplicationContext,
     private val dataSource: DataSource

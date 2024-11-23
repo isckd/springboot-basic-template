@@ -6,6 +6,7 @@ import jakarta.servlet.ServletInputStream
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
@@ -13,6 +14,17 @@ import org.springframework.web.util.ContentCachingResponseWrapper
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 
+/**
+ * MDC 컬렉션에서 Custom Header 값을 불러와 HTTP Request / Response 로그를 출력
+ *
+ * 아래 예시)
+ * 2024-11-23 23:52:00.418 INFO  [http-nio-8080-exec-1] c.e.d.c.CustomRequestLoggingFilter T[20241123235200-8138947] - [SBT-REQ] POST /api/books {"id":null,"name":"Test Book","category":"Test Category"}
+ * 	Headers={accept-encoding=gzip, user-agent=ReactorNetty/1.1.22, host=localhost:8080, accept=*, x-component-name=SBT, content-type=application/json, content-length=57}
+ * 2024-11-23 23:52:00.545 INFO  [http-nio-8080-exec-1] c.e.d.c.CustomRequestLoggingFilter T[20241123235200-8138947] - [SBT-RES] 200 126ms /api/books {"id":1,"name":"Test Book","category":"Test Category"}
+ * 	Headers={X-Trace-Id=20241123235200-8138947}
+ *
+ *
+ */
 @Component
 class CustomRequestLoggingFilter : OncePerRequestFilter() {
 
@@ -75,12 +87,14 @@ class CustomRequestLoggingFilter : OncePerRequestFilter() {
                 .replace("\r", "")
                 .replace(" +".toRegex(), " ") 
         } ?: ""
-        log.info("[REQ] $method $uri $content \n\tHeaders=$headers")
+        val componentName = MDC.get("componentName") ?: "UNKNOWN"
+        log.info("[$componentName-REQ] $method $uri $content \n\tHeaders=$headers")
     }
 
     private fun logResponse(request: ContentCachingRequestWrapper, response: ContentCachingResponseWrapper, duration: Long) {
         val content = String(response.contentAsByteArray, StandardCharsets.UTF_8)
-        log.info("[RES] ${response.status} ${duration}ms ${request.requestURI} $content \n\tHeaders=${getResponseHeaders(response)}")
+        val componentName = MDC.get("componentName") ?: "unknown"
+        log.info("[$componentName-RES] ${response.status} ${duration}ms ${request.requestURI} $content \n\tHeaders=${getResponseHeaders(response)}")
     }
 
     private fun getHeaders(request: HttpServletRequest): Map<String, String> {
