@@ -14,4 +14,15 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false  # Disable default Hibernate logging
+    properties:
+      hibernate:
+        format_sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug  # Log SQL queries
+    # org.hibernate.orm.jdbc.bind: trace  # Log SQL parameters
+    # org.hibernate.type.descriptor.sql: trace  # Log SQL parameters details
