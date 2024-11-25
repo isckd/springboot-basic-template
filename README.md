@@ -90,7 +90,29 @@ Datetime LogLevel Thread className T[TraceId] - [REQ/RES] HTTPMethod URI Request
 <br>
 <br>
 
+# HTTP Error Handling
+GlobalExceptionHandler <br>
+ErrorCode 에 ErrorType, HttpStatus, Message 를 정의하여 사용 <br>
+정의한 BusinessException 또는 정의하지 않은 Exception 발생 시 ErrorResponse 을 반환 <br>
+
+```
+{
+  "returnCode": "B001",
+  "returnMessage": "해당 책을 찾을 수 없습니다."
+}
+``` 
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+
 # TODO
-전역 에러 처리 적용 <br>
 Actuator 적용 <br>
 WebClient 사용 예시 <br>
+테스트코드 고도화 <br>
+OpenAPI Generator, REDOC 적용

@@ -1,5 +1,7 @@
 package com.example.demo.controller
 
+import com.example.demo.common.error.BusinessException
+import com.example.demo.common.error.ErrorCode
 import com.example.demo.entity.Book
 import com.example.demo.repository.BookRepository
 import io.swagger.v3.oas.annotations.Operation
@@ -21,7 +23,9 @@ class BookController(
     @GetMapping
     fun getAllBooks(): List<Book> {
         log.info("Fetching all books")
-        return bookRepository.findAll()
+        return bookRepository.findAll().also {
+            if (it.isEmpty()) { log.warn("No books found") }
+        }
     }
 
     @Operation(
@@ -39,20 +43,17 @@ class BookController(
                 log.debug("Found book: {}", it)
                 ResponseEntity.ok(it)
             }
-            .orElse(
-                ResponseEntity.notFound().build<Book>().also {
-                    log.warn("Book not found with id: {}", id)
-                }
-            )
+            .orElseThrow {
+                log.warn("Book not found with id: {}", id)
+                throw BusinessException(ErrorCode.BOOK_NOT_FOUND)
+            }
     }
 
     @Operation(summary = "Create a new book")
     @PostMapping
     fun createBook(@RequestBody book: Book): Book {
         log.info("Creating new book: {}", book)
-        return bookRepository.save(book).also {
-            log.debug("Created book with id: {}", it.id)
-        }
+        return bookRepository.save(book).also { log.debug("Created book with id: {}", it.id) }
     }
 
     @Operation(
@@ -71,7 +72,7 @@ class BookController(
             ResponseEntity.noContent().build()
         } else {
             log.warn("Book not found with id: {}", id)
-            ResponseEntity.notFound().build()
+            throw BusinessException(ErrorCode.BOOK_NOT_FOUND)
         }
     }
 
@@ -87,12 +88,10 @@ class BookController(
         log.info("Updating book with id: {}", id)
         return if (bookRepository.existsById(id)) {
             book.id = id
-            ResponseEntity.ok(bookRepository.save(book).also {
-                log.debug("Updated book: {}", it)
-            })
+            ResponseEntity.ok(bookRepository.save(book).also { log.debug("Updated book: {}", it) })
         } else {
             log.warn("Book not found with id: {}", id)
-            ResponseEntity.notFound().build()
+            throw BusinessException(ErrorCode.BOOK_NOT_FOUND)
         }
     }
 }
