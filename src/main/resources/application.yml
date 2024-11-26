@@ -5,17 +5,19 @@ spring:
   application:
     name: SBT
   datasource:
-    url: jdbc:h2:mem:testdb
+    # embedded h2, intellij Database -> DataSource from URL -> jdbc:h2:file:./h2db;AUTO_SERVER=true
+    url: jdbc:h2:file:./h2db;AUTO_SERVER=true
     driver-class-name: org.h2.Driver
     username: sa
     password: ''
   h2:
     console:
       enabled: true
+      path: /h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: false  # Disable default Hibernate logging
     properties:
       hibernate:
@@ -28,3 +30,13 @@ logging:
     org.hibernate.SQL: debug  # Log SQL queries
     # org.hibernate.orm.jdbc.bind: trace  # Log SQL parameters
     # org.hibernate.type.descriptor.sql: trace  # Log SQL parameters details
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

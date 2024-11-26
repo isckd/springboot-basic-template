@@ -54,3 +54,7 @@ replay_pid*
 ### Docker ###
 .docker/
 docker-compose.override.yml
+
+
+### Test DB ###
+*.db

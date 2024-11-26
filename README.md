@@ -112,7 +112,6 @@ ErrorCode 에 ErrorType, HttpStatus, Message 를 정의하여 사용 <br>
 
 
 # TODO
-Actuator 적용 <br>
 WebClient 사용 예시 <br>
 테스트코드 고도화 <br>
 OpenAPI Generator, REDOC 적용
