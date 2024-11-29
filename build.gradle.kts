@@ -26,11 +26,16 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // for webclient
     implementation ("org.springframework.boot:spring-boot-starter-webflux")
+
+    // for actuator     /actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    // for prometheus   /prometheus
+    implementation("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.withType<KotlinCompile> {

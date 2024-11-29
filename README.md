@@ -112,6 +112,7 @@ ErrorCode 에 ErrorType, HttpStatus, Message 를 정의하여 사용 <br>
 
 
 # TODO
+Author, Review 관련 API 추가, Service 로직 작성 <br>
 WebClient 사용 예시 <br>
 테스트코드 고도화 <br>
 OpenAPI Generator, REDOC 적용
