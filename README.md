@@ -10,7 +10,7 @@ springboot-basic-template
 <br>
 <br>
 
-# First Setting
+# First Settingz
 settings.gradle.kts - rootProject.name = {projectName}  <br>
 application.yml <br>
 - spring.application.name = {projectName}
@@ -29,13 +29,18 @@ application.yml <br>
 ## Docker
 
 ### docker pull
+
+```
 docker pull gradle:8.5-jdk21
 docker pull openjdk:21-jdk
+```
 
 ### docker build and run
+
+```
 docker build -t springboot-basic-template .
 docker run -p 8080:8080 --name springboot-basic-template springboot-basic-template
-
+```
 
 <br>
 <br>
